@@ -1,10 +1,17 @@
-from flask import Flask
+from flask import Flask, request
 from config import WEBHOOK_SECRET
 from db import init_db
-from handlers.webhook_handler import webhook
+import os
 
 app = Flask(__name__)
-app.add_url_rule(f"/webhook/{WEBHOOK_SECRET}", view_func=webhook, methods=["POST"])
+
+# Inline webhook handler
+@app.route(f"/webhook/{WEBHOOK_SECRET}", methods=["POST"])
+def webhook():
+    data = request.json
+    print("Received webhook data:", data)
+    # TODO: Add your processing logic here
+    return "", 200
 
 @app.route("/")
 def home():
